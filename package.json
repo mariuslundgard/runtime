@@ -14,7 +14,9 @@
   },
   "files": [
     "/bin",
-    "/lib"
+    "/eslint",
+    "/lib",
+    "/tsconfig.settings.json"
   ],
   "author": "Marius Lundgård <studio@mariuslundgard.com>",
   "license": "MIT",
