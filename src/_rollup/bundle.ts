@@ -3,12 +3,12 @@ import commonjs from '@rollup/plugin-commonjs'
 import json from '@rollup/plugin-json'
 import {nodeResolve} from '@rollup/plugin-node-resolve'
 import chalk from 'chalk'
-import rollup from 'rollup'
+import {ModuleFormat, OutputOptions, rollup as rollupBundle, RollupOptions} from 'rollup'
 import ts from 'rollup-plugin-typescript2'
 
 export async function bundle(opts: {
   build: {
-    format: rollup.ModuleFormat
+    format: ModuleFormat
     outDir: string
   }
   cwd: string
@@ -16,7 +16,7 @@ export async function bundle(opts: {
   tsconfig?: string
 }) {
   // see below for details on the options
-  const inputOptions: rollup.RollupOptions = {
+  const inputOptions: RollupOptions = {
     // core input options
     external: [
       '@rollup/plugin-commonjs',
@@ -67,7 +67,7 @@ export async function bundle(opts: {
     // perf
   }
 
-  const outputOptions: rollup.OutputOptions = {
+  const outputOptions: OutputOptions = {
     // core output options
     dir: opts.build.outDir,
     // file,
@@ -114,7 +114,7 @@ export async function bundle(opts: {
   }
 
   // Create bundle
-  const bundle = await rollup.rollup(inputOptions)
+  const bundle = await rollupBundle(inputOptions)
 
   // console.log(bundle.watchFiles) // an array of file names this bundle depends on
 
