@@ -9,12 +9,6 @@ export const buildCommand: CmdFn = async ({args, cwd, flags}) => {
     throw err
   }
 
-  const main = args[0]
-
-  if (typeof main !== 'string') {
-    throw new Error('missing input')
-  }
-
   await build({
     cwd,
     tsconfig: typeof flags.tsconfig === 'string' ? flags.tsconfig : undefined,
