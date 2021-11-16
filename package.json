@@ -1,0 +1,76 @@
+{
+  "name": "@mariuslundgard/runtime",
+  "version": "0.1.0",
+  "main": "lib/cjs/runtime.js",
+  "module": "lib/esm/runtime.js",
+  "types": "lib/esm/index.d.ts",
+  "source": "src/index.ts",
+  "exports": {
+    "require": "./lib/cjs/runtime.js",
+    "default": "./lib/esm/runtime.js"
+  },
+  "bin": {
+    "runtime": "bin/runtime"
+  },
+  "files": [
+    "/bin",
+    "/lib"
+  ],
+  "author": "Marius Lundgård <studio@mariuslundgard.com>",
+  "license": "MIT",
+  "scripts": {
+    "build": "node -r esbuild-register scripts/build",
+    "clean": "rimraf lib",
+    "lint": "eslint . --ext .js,.mjs,.ts --quiet",
+    "prebuild": "yarn clean",
+    "prepare": "yarn build",
+    "release": "yarn prepare && yarn test && changeset publish",
+    "test": "echo 'todo'"
+  },
+  "dependencies": {
+    "@rollup/plugin-commonjs": "^21.0.1",
+    "@rollup/plugin-json": "^4.1.0",
+    "@rollup/plugin-node-resolve": "^13.0.6",
+    "@typescript-eslint/parser": "^5.4.0",
+    "dotenv-flow": "^3.2.0",
+    "eslint": "^7.32.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-import": "^2.25.3",
+    "eslint-plugin-jsx-a11y": "^6.5.1",
+    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-react": "^7.27.0",
+    "eslint-plugin-react-hooks": "^4.3.0",
+    "mkdirp": "^1.0.4",
+    "nanoid": "^3.1.30",
+    "rollup": "^2.60.0",
+    "rollup-plugin-typescript2": "^0.30.0",
+    "tslib": "^2.3.1"
+  },
+  "devDependencies": {
+    "@changesets/cli": "^2.18.0",
+    "@changesets/changelog-github": "^0.4.1",
+    "@tsconfig/node16": "^1.0.2",
+    "@types/mkdirp": "^1.0.2",
+    "@types/node": "^16.11.7",
+    "@types/rimraf": "^3.0.2",
+    "@types/yargs": "^17.0.5",
+    "chalk": "^4.1.2",
+    "esbuild": "^0.13.14",
+    "esbuild-register": "^3.1.2",
+    "prettier": "^2.4.1",
+    "rimraf": "^3.0.2",
+    "typescript": "^4.4.4",
+    "yargs": "^17.2.1"
+  },
+  "peerDependencies": {
+    "prettier": "^2.4.1",
+    "typescript": "^4.4"
+  },
+  "repository": "mariuslundgard/runtime",
+  "bugs": {
+    "url": "https://github.com/mariuslundgard/runtime/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
