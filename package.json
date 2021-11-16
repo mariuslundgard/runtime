@@ -3,7 +3,7 @@
   "version": "0.1.7",
   "main": "lib/cjs/runtime.js",
   "module": "lib/esm/runtime.js",
-  "types": "lib/esm/index.d.ts",
+  "types": "lib/dts/index.d.ts",
   "source": "src/index.ts",
   "exports": {
     "require": "./lib/cjs/runtime.js",

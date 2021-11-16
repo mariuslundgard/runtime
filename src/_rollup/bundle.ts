@@ -13,6 +13,7 @@ export async function bundle(opts: {
   }
   cwd: string
   input: Record<string, string>
+  target: 'node' | 'browser'
   tsconfig?: string
 }) {
   // see below for details on the options
@@ -38,12 +39,28 @@ export async function bundle(opts: {
     plugins: [
       // postcss(),
       // alias(),
-      nodeResolve(),
-      commonjs(),
+      nodeResolve({
+        mainFields: ['module', 'jsnext', 'main'],
+        browser: opts.target !== 'node',
+        exportConditions: [opts.target === 'node' ? 'node' : 'browser'],
+        extensions: ['.mjs', '.js', '.jsx', '.json', '.node'],
+        preferBuiltins: opts.target === 'node',
+      }),
+      commonjs({
+        esmExternals: false,
+        include: /\/node_modules\//,
+        requireReturnsDefault: 'namespace',
+      }),
       json(),
       typescript({
         tsconfig: opts.tsconfig,
-        // useTsconfigDeclarationDir: true,
+        tsconfigOverride: {
+          compilerOptions: {
+            module: 'ESNext',
+            target: 'esnext',
+          },
+        },
+        useTsconfigDeclarationDir: true,
       }),
       // babel(),
       // customBabel(),

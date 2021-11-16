@@ -10,6 +10,7 @@ export async function build(opts: {cwd: string}) {
 
   for (const build of config.builds) {
     const input = build.input
+    const target = build.target
     const tsconfig = build.tsconfig || 'tsconfig.json'
 
     console.log(chalk.blue('tsconfig'), tsconfig)
@@ -18,6 +19,7 @@ export async function build(opts: {cwd: string}) {
       cwd,
       input,
       build: {outDir: build.output.dir + '/cjs', format: 'cjs'},
+      target,
       tsconfig,
     })
 
@@ -25,6 +27,7 @@ export async function build(opts: {cwd: string}) {
       cwd,
       input,
       build: {outDir: build.output.dir + '/esm', format: 'esm'},
+      target,
       tsconfig,
     })
   }
