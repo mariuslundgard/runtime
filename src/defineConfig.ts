@@ -14,6 +14,7 @@ interface RuntimeConfigSpec {
   external?: string[]
   // paths: string[]
   // server: (req: RuntimeRequest) => Promise<string>
+  tsconfig?: string
 }
 
 export async function defineConfig(
@@ -39,5 +40,6 @@ export async function defineConfig(
     external: spec.external || [],
     // paths: spec.paths,
     // server: spec.server,
+    tsconfig: spec.tsconfig,
   }
 }

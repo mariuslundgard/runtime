@@ -13,4 +13,5 @@ export interface RuntimeConfig {
   external: string[]
   // paths: string[]
   // server: (req: RuntimeRequest) => Promise<string>
+  tsconfig?: string
 }

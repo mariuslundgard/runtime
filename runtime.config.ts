@@ -10,4 +10,5 @@ export default defineConfig({
       dir: 'lib',
     },
   },
+  tsconfig: 'tsconfig.lib.json',
 })
