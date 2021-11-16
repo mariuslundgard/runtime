@@ -1,20 +1,15 @@
-import type {
-  RuntimeConfig,
-  // RuntimeRequest
-} from './types'
+import type {RuntimeBuildConfig, RuntimeConfig} from './types'
 
 interface RuntimeConfigSpec {
-  // build?: {outDir?: string}
-  bundle?: {
+  builds?: {
+    external?: string[]
     input: Record<string, string>
     output?: {
       dir?: string
     }
-  }
-  external?: string[]
-  // paths: string[]
-  // server: (req: RuntimeRequest) => Promise<string>
-  tsconfig?: string
+    target?: 'node' | 'browser'
+    tsconfig?: string
+  }[]
 }
 
 export async function defineConfig(
@@ -24,22 +19,16 @@ export async function defineConfig(
     return defineConfig(await spec())
   }
 
-  return {
-    bundle: {
-      ...(spec.bundle || {}),
-      input: spec.bundle?.input || {},
-      output: {
-        ...spec.bundle?.output,
-        dir: spec.bundle?.output?.dir || 'lib',
-      },
+  const builds: RuntimeBuildConfig[] = (spec.builds || []).map((b) => ({
+    external: b.external || [],
+    tsconfig: b.tsconfig,
+    input: b.input || {},
+    output: {
+      ...b.output,
+      dir: b.output?.dir || 'lib',
     },
-    // build: {
-    //   ...(spec.build || {}),
-    //   outDir: spec.build?.outDir || 'public',
-    // },
-    external: spec.external || [],
-    // paths: spec.paths,
-    // server: spec.server,
-    tsconfig: spec.tsconfig,
-  }
+    target: b.target || 'node',
+  }))
+
+  return {builds}
 }

@@ -1,7 +1,7 @@
 import {build} from '../../build'
 import {CmdFn} from '../types'
 
-export const buildCommand: CmdFn = async ({cwd, flags}) => {
+export const buildCommand: CmdFn = async ({cwd}) => {
   // eslint-disable-next-line no-useless-catch
   try {
     require('dotenv-flow').config({node_env: 'production', path: cwd})
@@ -9,8 +9,5 @@ export const buildCommand: CmdFn = async ({cwd, flags}) => {
     throw err
   }
 
-  await build({
-    cwd,
-    tsconfig: typeof flags.tsconfig === 'string' ? flags.tsconfig : undefined,
-  })
+  await build({cwd})
 }

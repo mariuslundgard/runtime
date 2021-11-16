@@ -4,30 +4,28 @@ import {bundle} from './_rollup/bundle'
 import {resolveConfig} from './resolveConfig'
 
 export async function build(opts: {cwd: string}) {
-  const cachePath = path.resolve(opts.cwd, '.workshop')
-  const config = await resolveConfig({cachePath, cwd: opts.cwd})
-  const input = config.bundle.input
-  const tsconfig = config.tsconfig || 'tsconfig.json'
+  const {cwd} = opts
+  const cachePath = path.resolve(cwd, '.workshop')
+  const config = await resolveConfig({cachePath, cwd})
 
-  console.log(chalk.blue('tsconfig'), tsconfig)
+  for (const build of config.builds) {
+    const input = build.input
+    const tsconfig = build.tsconfig || 'tsconfig.json'
 
-  await bundle({
-    ...opts,
-    input,
-    build: {
-      outDir: config.bundle.output.dir + '/cjs',
-      format: 'cjs',
-    },
-    tsconfig: config.tsconfig,
-  })
+    console.log(chalk.blue('tsconfig'), tsconfig)
 
-  await bundle({
-    ...opts,
-    input,
-    build: {
-      outDir: config.bundle.output.dir + '/esm',
-      format: 'esm',
-    },
-    tsconfig: config.tsconfig,
-  })
+    await bundle({
+      cwd,
+      input,
+      build: {outDir: build.output.dir + '/cjs', format: 'cjs'},
+      tsconfig,
+    })
+
+    await bundle({
+      cwd,
+      input,
+      build: {outDir: build.output.dir + '/esm', format: 'esm'},
+      tsconfig,
+    })
+  }
 }

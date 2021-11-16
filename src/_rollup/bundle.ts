@@ -3,8 +3,8 @@ import commonjs from '@rollup/plugin-commonjs'
 import json from '@rollup/plugin-json'
 import {nodeResolve} from '@rollup/plugin-node-resolve'
 import chalk from 'chalk'
-import {ModuleFormat, OutputOptions, rollup as rollupBundle, RollupOptions} from 'rollup'
-import ts from 'rollup-plugin-typescript2'
+import {InputOptions, ModuleFormat, OutputOptions, rollup as rollupBundle} from 'rollup'
+import typescript from 'rollup-plugin-typescript2'
 
 export async function bundle(opts: {
   build: {
@@ -16,7 +16,7 @@ export async function bundle(opts: {
   tsconfig?: string
 }) {
   // see below for details on the options
-  const inputOptions: RollupOptions = {
+  const inputOptions: InputOptions = {
     // core input options
     external: [
       '@rollup/plugin-commonjs',
@@ -41,8 +41,9 @@ export async function bundle(opts: {
       nodeResolve(),
       commonjs(),
       json(),
-      ts({
+      typescript({
         tsconfig: opts.tsconfig,
+        // useTsconfigDeclarationDir: true,
       }),
       // babel(),
       // customBabel(),
@@ -51,7 +52,21 @@ export async function bundle(opts: {
     ],
     // // advanced input options
     // cache,
-    // onwarn,
+    onwarn(warning, warn) {
+      // https://github.com/rollup/rollup/blob/0fa9758cb7b1976537ae0875d085669e3a21e918/src/utils/error.ts#L324
+      if (warning.code === 'UNRESOLVED_IMPORT') {
+        console.warn(
+          `Failed to resolve the module ${warning.source} imported by ${warning.importer}` +
+            `\nIs the module installed? Note:` +
+            `\n ↳ to inline a module into your bundle, install it to "devDependencies".` +
+            `\n ↳ to depend on a module via import/require, install it to "dependencies".`
+        )
+
+        return
+      }
+
+      warn(warning)
+    },
     // preserveEntrySignatures,
     // strictDeprecations,
     // // danger zone
@@ -61,7 +76,9 @@ export async function bundle(opts: {
     // moduleContext,
     // preserveSymlinks,
     // shimMissingExports,
-    // treeshake: true,
+    treeshake: {
+      propertyReadSideEffects: false,
+    },
     // // experimental
     // experimentalCacheExpiry,
     // perf
@@ -101,9 +118,9 @@ export async function bundle(opts: {
     // validate,
     // // danger zone
     // amd,
-    // esModule,
-    // exports,
-    // freeze,
+    esModule: false,
+    exports: 'auto',
+    freeze: false,
     // indent,
     // namespaceToStringTag,
     // noConflict,
