@@ -1,6 +1,6 @@
 {
   "name": "@mariuslundgard/runtime",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "main": "lib/cjs/runtime.js",
   "module": "lib/esm/runtime.js",
   "types": "lib/dts/index.d.ts",
