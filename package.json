@@ -13,10 +13,11 @@
     "runtime": "bin/runtime"
   },
   "files": [
-    "/bin",
-    "/eslint",
-    "/lib",
-    "/tsconfig.settings.json"
+    "bin",
+    "eslint",
+    "lib",
+    "src",
+    "tsconfig.settings.json"
   ],
   "author": "Marius Lundgård <studio@mariuslundgard.com>",
   "license": "MIT",
