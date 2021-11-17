@@ -1,7 +1,7 @@
 import path from 'path'
 import chalk from 'chalk'
-import {bundle} from './_rollup/bundle'
 import {resolveConfig} from './resolveConfig'
+import {bundle} from './rollup'
 
 export async function build(opts: {cwd: string}) {
   const {cwd} = opts

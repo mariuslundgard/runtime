@@ -4,6 +4,7 @@ export default defineConfig({
   builds: [
     {
       input: {
+        build: 'src/build.ts',
         cli: 'src/cli/index.ts',
         runtime: 'src/index.ts',
       },
