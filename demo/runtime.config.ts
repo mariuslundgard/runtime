@@ -15,10 +15,20 @@ export default defineConfig({
   ],
 
   server: {
-    handle(req: RuntimeRequest) {
-      return `<!doctype html><html>${req.path}</html>`
+    handle(_req: RuntimeRequest) {
+      return [
+        `<!doctype html>`,
+        `<html>`,
+        `<body>`,
+        `<h1>App</h1>`,
+        `<script src="/main.js"></script>`,
+        `</body>`,
+        `</html>`,
+      ].join('')
     },
 
     paths: ['/'],
+
+    root: path.resolve(__dirname, '../../public'),
   },
 })
