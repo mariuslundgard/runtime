@@ -32,6 +32,7 @@ export async function build(opts: {cwd: string}) {
     if (target === 'node') {
       const cjsFiles = await bundle({
         cwd,
+        external: config.external,
         input,
         build: {outDir: build.output.dir + '/cjs', format: 'cjs'},
         target: 'node',
@@ -42,6 +43,7 @@ export async function build(opts: {cwd: string}) {
 
       const esmFiles = await bundle({
         cwd,
+        external: config.external,
         input,
         build: {outDir: build.output.dir + '/esm', format: 'esm'},
         target: 'node',
@@ -56,6 +58,7 @@ export async function build(opts: {cwd: string}) {
     if (target === 'browser') {
       const iifeFiles = await bundle({
         cwd,
+        external: config.external,
         input,
         build: {outDir: build.output.dir, format: 'iife'},
         target: 'browser',

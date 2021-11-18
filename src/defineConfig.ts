@@ -10,6 +10,7 @@ interface RuntimeConfigSpec {
     target?: 'node' | 'browser'
     tsconfig?: string
   }[]
+  external?: string[]
   server?: RuntimeServer
 }
 
@@ -20,10 +21,9 @@ export async function defineConfig(
     return defineConfig(await spec())
   }
 
-  const {server} = spec
+  const {external = [], server} = spec
 
   const builds: RuntimeBuildConfig[] = (spec.builds || []).map((b) => ({
-    external: b.external || [],
     tsconfig: b.tsconfig,
     input: b.input || {},
     output: {
@@ -33,5 +33,5 @@ export async function defineConfig(
     target: b.target || 'node',
   }))
 
-  return {builds, server}
+  return {builds, external, server}
 }

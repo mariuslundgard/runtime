@@ -3,7 +3,6 @@ export interface RuntimeRequest {
 }
 
 export interface RuntimeBuildConfig {
-  external: string[]
   input: Record<string, string>
   output: {
     dir: string
@@ -20,5 +19,6 @@ export interface RuntimeServer {
 
 export interface RuntimeConfig {
   builds: RuntimeBuildConfig[]
+  external: string[]
   server?: RuntimeServer
 }

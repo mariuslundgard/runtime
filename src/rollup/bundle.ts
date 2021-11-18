@@ -25,15 +25,12 @@ export async function bundle(opts: {
       '@rollup/plugin-node-resolve',
       'chalk',
       'express',
-      'fs',
       'mkdirp',
       'nanoid',
-      'path',
       'rimraf',
       'rollup',
       'rollup-plugin-typescript2',
       'yargs',
-      'util',
     ]),
     input: opts.input, // conditionally required
     plugins: [
