@@ -1,13 +1,13 @@
 import path from 'path'
 import chalk from 'chalk'
 import {buildCommand} from './commands/build'
-// import {devCommand} from './commands/dev'
+import {devCommand} from './commands/dev'
 import {getCLIContext} from './helpers'
 import {CmdFn} from './types'
 
 const commands: {[key: string]: CmdFn | undefined} = {
   build: buildCommand,
-  // dev: devCommand,
+  dev: devCommand,
 }
 
 async function runCli() {
@@ -19,12 +19,6 @@ async function runCli() {
   if (typeof cmd !== 'string') throw new Error('expected command to be a string')
 
   const cmdFn = cmd ? commands[cmd] : commands.dev
-
-  // if (cwd) {
-  //   console.log({cwd, flags})
-
-  //   return
-  // }
 
   if (cmdFn) return cmdFn({args, cwd, flags})
 

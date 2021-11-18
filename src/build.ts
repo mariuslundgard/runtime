@@ -1,10 +1,21 @@
 import path from 'path'
 import chalk from 'chalk'
 import mkdirp from 'mkdirp'
-import {writeFile} from './helpers'
+import {resolveHtml, resolvePaths, writeFile} from './helpers'
 import {resolveConfig} from './resolveConfig'
 import {bundle} from './rollup'
-import {RuntimeServer} from '.'
+
+function logOutputFiles(cwd: string, files: {type: 'asset' | 'chunk'; path: string}[]) {
+  for (const f of files) {
+    if (f.type === 'asset') {
+      console.log(chalk.yellow('asset'), '→', path.relative(cwd, f.path))
+    }
+
+    if (f.type === 'chunk') {
+      console.log(chalk.green('chunk'), '→', path.relative(cwd, f.path))
+    }
+  }
+}
 
 export async function build(opts: {cwd: string}) {
   const {cwd} = opts
@@ -19,7 +30,7 @@ export async function build(opts: {cwd: string}) {
     console.log(chalk.blue('tsconfig'), tsconfig)
 
     if (target === 'node') {
-      await bundle({
+      const cjsFiles = await bundle({
         cwd,
         input,
         build: {outDir: build.output.dir + '/cjs', format: 'cjs'},
@@ -27,7 +38,9 @@ export async function build(opts: {cwd: string}) {
         tsconfig,
       })
 
-      await bundle({
+      logOutputFiles(opts.cwd, cjsFiles)
+
+      const esmFiles = await bundle({
         cwd,
         input,
         build: {outDir: build.output.dir + '/esm', format: 'esm'},
@@ -35,17 +48,21 @@ export async function build(opts: {cwd: string}) {
         tsconfig,
       })
 
+      logOutputFiles(opts.cwd, esmFiles)
+
       break
     }
 
     if (target === 'browser') {
-      await bundle({
+      const iifeFiles = await bundle({
         cwd,
         input,
         build: {outDir: build.output.dir, format: 'iife'},
         target: 'browser',
         tsconfig,
       })
+
+      logOutputFiles(opts.cwd, iifeFiles)
 
       break
     }
@@ -63,24 +80,7 @@ export async function build(opts: {cwd: string}) {
       await mkdirp(dirPath)
       await writeFile(filePath, html)
 
-      // console.log('GET', p)
-      // console.log(html)
-
       console.log(chalk.green(`GET ${p}`), '→', path.relative(opts.cwd, filePath))
     }
   }
-}
-
-async function resolveHtml(server: RuntimeServer, path: string) {
-  return server.handle({path})
-}
-
-async function resolvePaths(
-  pathsOrFn: (() => Promise<string[]> | string[]) | string[]
-): Promise<string[]> {
-  if (typeof pathsOrFn === 'function') {
-    return pathsOrFn()
-  }
-
-  return pathsOrFn
 }

@@ -15,6 +15,7 @@ export interface RuntimeBuildConfig {
 export interface RuntimeServer {
   handle: (req: RuntimeRequest) => Promise<string> | string
   paths: (() => Promise<string[]> | string[]) | string[]
+  root?: string
 }
 
 export interface RuntimeConfig {

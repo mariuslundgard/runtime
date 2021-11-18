@@ -1,8 +1,8 @@
 import path from 'path'
-import esbuild from 'esbuild'
 import mkdirp from 'mkdirp'
 import {nanoid} from 'nanoid'
 import {rimraf} from './helpers'
+import {bundle} from './rollup'
 import {RuntimeConfig} from './types'
 
 export async function resolveConfig(context: {
@@ -17,29 +17,27 @@ export async function resolveConfig(context: {
   const rawConfigPath = path.resolve(cwd, 'runtime.config.ts')
   const configPath = path.resolve(cachePath, `${buildId}.config.js`)
 
-  try {
-    const tsconfigPath = path.resolve(cwd, 'tsconfig.json')
-
-    await esbuild.build({
-      bundle: true,
-      entryPoints: [rawConfigPath],
-      external: ['esbuild'],
+  const files = await bundle({
+    cwd,
+    input: {
+      [`${buildId}.config`]: rawConfigPath,
+    },
+    build: {
       format: 'cjs',
-      platform: 'node',
-      outfile: configPath,
-      tsconfig: tsconfigPath,
-    })
+      outDir: cachePath,
+    },
+    target: 'node',
+  })
 
-    const configMod = require(configPath)
-    const configPromise: Promise<RuntimeConfig> = configMod.default ? configMod.default : configMod
-    const config = await configPromise
+  const configMod = require(configPath)
+  const configPromise: Promise<RuntimeConfig> = configMod.default ? configMod.default : configMod
+  const config = await configPromise
 
-    await rimraf(configPath)
-
-    return config
-  } catch (err) {
-    await rimraf(configPath)
-
-    throw err
+  for (const f of files) {
+    await rimraf(f.path)
+    await rimraf(f.path + '.map')
+    await rimraf(f.path + '.d.ts')
   }
+
+  return config
 }
