@@ -23,6 +23,7 @@
   "license": "MIT",
   "scripts": {
     "build": "node -r esbuild-register scripts/build",
+    "build:demo": "bin/runtime --cwd demo build",
     "clean": "rimraf lib",
     "lint": "eslint . --ext .js,.mjs,.ts --quiet",
     "prebuild": "yarn clean",
