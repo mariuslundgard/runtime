@@ -166,6 +166,7 @@ export async function bundle(opts: {
       // }
       console.log(
         chalk.yellow('asset'),
+        '→',
         chalk.gray(path.relative(opts.cwd, path.resolve(opts.build.outDir, chunkOrAsset.fileName)))
       )
       // console.log('Asset', chunkOrAsset)
@@ -200,6 +201,7 @@ export async function bundle(opts: {
       // console.log('Chunk', chunkOrAsset.modules)
       console.log(
         chalk.green('chunk'),
+        '→',
         path.relative(opts.cwd, path.resolve(opts.build.outDir, chunkOrAsset.fileName))
       )
     }
@@ -210,6 +212,4 @@ export async function bundle(opts: {
 
   // closes the bundle
   await bundle.close()
-
-  console.log('done')
 }

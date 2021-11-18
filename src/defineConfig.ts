@@ -1,4 +1,4 @@
-import type {RuntimeBuildConfig, RuntimeConfig} from './types'
+import type {RuntimeBuildConfig, RuntimeConfig, RuntimeServer} from './types'
 
 interface RuntimeConfigSpec {
   builds?: {
@@ -10,6 +10,7 @@ interface RuntimeConfigSpec {
     target?: 'node' | 'browser'
     tsconfig?: string
   }[]
+  server?: RuntimeServer
 }
 
 export async function defineConfig(
@@ -18,6 +19,8 @@ export async function defineConfig(
   if (typeof spec === 'function') {
     return defineConfig(await spec())
   }
+
+  const {server} = spec
 
   const builds: RuntimeBuildConfig[] = (spec.builds || []).map((b) => ({
     external: b.external || [],
@@ -30,5 +33,5 @@ export async function defineConfig(
     target: b.target || 'node',
   }))
 
-  return {builds}
+  return {builds, server}
 }
